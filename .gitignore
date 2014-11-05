@@ -26,3 +26,11 @@
 *.exe
 *.out
 *.app
+
+# Models
+viewer/models/
+viewer/textures/
+
+# 
+.DS_Store
+._*
