@@ -14,6 +14,19 @@ out vec4 fragColor;
 
 void main( void )
 {
-    // Here begins the real work.
-    fragColor = vertColor;
+    vec4 normalizedLightVector = normalize(lightVector),
+         normalizedNormal = normalize(vec4(vertNormal, 0.0));
+
+    // Ambient
+    float ka = 0.2;
+    vec4 ambient = ka * lightIntensity * vertColor;
+
+    // Diffuse
+    float kd = 0.3;
+    vec4 diffuse = kd * max(dot(normalizedNormal, normalizedLightVector), 0.0) * vertColor;
+
+    // Specular
+    // TODO
+
+    fragColor = ambient + diffuse;
 }
