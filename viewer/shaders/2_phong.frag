@@ -29,7 +29,7 @@ void main( void )
     // Specular
     float ks = 0.4;
     vec4 reflectedRay = reflect(-normalizedLightVector, normalizedNormal);
-    vec4 specular = ks * pow(max(dot(reflectedRay, normalizedEyeVector), 0.0), shininess) * vertColor;
+    vec4 specular = ks * vertColor * pow(max(dot(reflectedRay, normalizedEyeVector), 0.0), shininess) * lightIntensity;
 
     fragColor = ambient + diffuse + specular;
 }
