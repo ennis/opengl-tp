@@ -33,8 +33,13 @@ void main( void )
     vec4 diffuse = kd * max(dot(normalizedNormal, normalizedLightVector), 0.0) * vertColor;
     // Specular
     float ks = 0.4;
+    vec4 specular;
+    if (blinnPhong) {
+      specular = ks * vertColor * pow(max(dot(normalizedNormal, H), 0.0), 4 * shininess) * lightIntensity;
+    } else {
     vec4 reflectedRay = reflect(-normalizedLightVector, normalizedNormal);
-    vec4 specular = ks * vertColor * pow(max(dot(reflectedRay, normalizedEyeVector), 0.0), shininess) * lightIntensity;
+      specular = ks * vertColor * pow(max(dot(reflectedRay, normalizedEyeVector), 0.0), shininess) * lightIntensity;
+    }
     specular *= fresnel(eta, dot(H, normalizedEyeVector));
 
     fragColor = ambient + diffuse + specular;
