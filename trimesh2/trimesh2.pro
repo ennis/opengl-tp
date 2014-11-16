@@ -1,20 +1,21 @@
 DESTDIR = ../../OpenGL_TP/trimesh2/lib
 
-win32 {
-    TEMPLATE = vclib
-}
-else {
-    TEMPLATE = lib
+#win32 {
+#    TEMPLATE = vclib
+#}
+#else {
+#    TEMPLATE = lib
 
-    macx {
-        DEFINES += DARWIN
-        QMAKE_CXXFLAGS_WARN_OFF = -Wno-unknown-pragmas
-    }
-    else {
-        DEFINES += LINUX
-    }
-}
+#    macx {
+#        DEFINES += DARWIN
+#        QMAKE_CXXFLAGS_WARN_OFF = -Wno-unknown-pragmas
+#    }
+#    else {
+#        DEFINES += LINUX
+#    }
+#}
 
+TEMPLATE = lib
 CONFIG += staticlib
 QT += opengl xml
 

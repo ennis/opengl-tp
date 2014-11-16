@@ -15,6 +15,7 @@
 #include <QHBoxLayout>
 #include <assert.h>
 
+#define M_PI 3.14159265358979323846
 
 #include "perlinNoise.h" // defines tables for Perlin Noise
 // shadowMapDimension: 512 if copy to CPU, 2048 if not

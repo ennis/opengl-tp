@@ -24,10 +24,10 @@ void main( void )
     vec4 vertPosition = matrix * vec4(vertex, 1.0);
     vec4 eyePosition = vec4(0.0, 0.0, 0.0, 1.0);
     // For illumination:
-    /* eyeVector = ...
-    lightVector = ... */
+    eyeVector = normalize(eyePosition - vertPosition);
+    lightVector = normalize(vec4(lightPosition, 1.0) - vertPosition);
     // For texture mapping:
-    // textCoords = ...
+    textCoords = texcoords;
 
     vertNormal = normalize(normalMatrix * normal);
     gl_Position = perspective * matrix * vec4(vertex, 1.0);
