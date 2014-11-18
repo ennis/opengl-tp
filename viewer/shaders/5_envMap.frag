@@ -35,10 +35,12 @@ void main( void )
     vec3 Vn = normalize(eyeVector);
     // Here begins the real work.
     vec4 Creflected = sampleEnvmap(reflect(-Vn, Nn));
-    vec4 Crefracted = sampleEnvmap(refract(-Vn, Nn, eta));
+    vec3 Rrn = refract(-Vn, Nn, 1.0/eta);
+    vec4 Crefracted = sampleEnvmap(Rrn);
     float F = fresnel(eta, max(0.0,dot(Nn, Vn)));
-    if (transparent)
+    if (transparent && dot(Rrn, Rrn) != 0.0)
         fragColor = mix(Crefracted, Creflected, F);
     else
+        // non transparent or total internal reflection
         fragColor = Creflected * F;
 }

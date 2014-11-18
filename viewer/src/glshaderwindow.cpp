@@ -113,7 +113,7 @@ void glShaderWindow::openNewTexture() {
                 texture = new QOpenGLTexture(QImage(textureName));
                 if (texture) {
                     texture->setWrapMode(QOpenGLTexture::Repeat);
-                    texture->setMinificationFilter(QOpenGLTexture::Linear);
+                    texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
                     texture->setMagnificationFilter(QOpenGLTexture::Linear);
                     texture->bind(0);
                     if (m_program->uniformLocation("colorTexture") != -1) m_program->setUniformValue("colorTexture", 0);
@@ -144,7 +144,7 @@ void glShaderWindow::openNewEnvMap() {
             environmentMap = new QOpenGLTexture(QImage(envMapName).mirrored());
             if (environmentMap) {
                 environmentMap->setWrapMode(QOpenGLTexture::MirroredRepeat);
-                environmentMap->setMinificationFilter(QOpenGLTexture::Linear);
+                environmentMap->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
                 environmentMap->setMagnificationFilter(QOpenGLTexture::Nearest);
                 environmentMap->bind(1);
                 m_program->setUniformValue("envMap", 1);
