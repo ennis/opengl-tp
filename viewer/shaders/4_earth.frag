@@ -31,11 +31,24 @@ void main( void )
           phi = mod(acos(vertPos.z / r), 2 * M_PI) / M_PI,
           theta = atan(vertPos.y, vertPos.x);
     theta = mod(theta, 2 * M_PI) / (2 * M_PI);
-    vec4 color = texture(earthDay, vec2(theta, phi));
+    vec2 texCoords = vec2(theta, phi);
+    vec4 color = texture(earthDay, texCoords);
+
+    // Bump mapping
+    vec3 ns = texture(earthNormals, texCoords).xyz;
+    ns = 2 * ns - vec3(1, 1, 1);
+    // Compute normal / tangent / bi-tangent
+    vec3 n = normalize(vertNormal);
+    vec3 t = normalize(normalMatrix * vec3(-sin(phi), cos(phi), 0));
+    vec3 b = normalize(cross(n, t));
+    // Local frame
+    mat3 localFrame = mat3(t, b, n);
+    // Modified normal
+    vec3 bumpNormal = normalize(transpose(localFrame) * ns);
 
     // illumination (phong)
     vec4 Ln = normalize(lightVector),
-         Nn = normalize(vec4(vertNormal, 0.0)),
+         Nn = normalize(vec4(bumpNormal, 0.0)),
          Vn = normalize(eyeVector);
     vec4 H = normalize(Ln + Vn);
     // Ambient
@@ -54,5 +67,6 @@ void main( void )
       specular = ks * color * pow(max(dot(R, Vn), 0.0), shininess) * lightIntensity;
     }
     specular *= fresnel(eta, dot(H, Vn));
+
     fragColor = ambient + diffuse + specular;
 }
