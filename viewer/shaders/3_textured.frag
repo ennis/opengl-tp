@@ -23,8 +23,9 @@ float fresnel(float eta, float cosTheta)
 
 void main( void )
 {
-	// sampling
+    // sampling
     vec4 color = texture(colorTexture, textCoords);
+
     // illumination (phong)
     vec4 Ln = normalize(lightVector),
          Nn = normalize(vec4(vertNormal, 0.0)),
@@ -47,5 +48,4 @@ void main( void )
     }
     specular *= fresnel(eta, dot(H, Vn));
     fragColor = ambient + diffuse + specular;
-    //fragColor = color;
 }
