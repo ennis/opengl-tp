@@ -28,9 +28,8 @@ void main( void )
 {
     // Compute texture coordinates
     float r = length(vertPos),
-          phi = mod(acos(vertPos.z / r), 2 * M_PI) / M_PI,
-          theta = atan(vertPos.y, vertPos.x);
-    theta = mod(theta, 2 * M_PI) / (2 * M_PI);
+          phi = acos(vertPos.z / r) / M_PI,
+          theta = atan(vertPos.y, vertPos.x) / (2 * M_PI) + 0.5;
     vec2 texCoords = vec2(theta, phi);
     vec4 color = texture(earthDay, texCoords);
 
