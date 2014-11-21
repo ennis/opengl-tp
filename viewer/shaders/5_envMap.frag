@@ -14,12 +14,13 @@ in vec3 lightVector;
 out vec4 fragColor;
 
 // direction in world space
-vec4 sampleEnvmap(vec3 Dn)
+vec4 sampleEnvmap(vec3 Pn)
 {
+    // NH: need multiplication by lightMatrix so environment can be rotated
+    vec3 Dn = (lightMatrix * vec4(Pn, 0.0)).xyz;
     float theta = acos(Dn.y)/M_PI;
     float phi = atan(Dn.z,Dn.x)/(2*M_PI)+0.5;
     return texture(envMap,vec2(phi,1.0-theta));
-   // return vec4(phi, theta, 0.0, 1.0);
 }
 
 float fresnel(float eta, float cosTheta)
@@ -38,9 +39,10 @@ void main( void )
     vec3 Rrn = refract(-Vn, Nn, 1.0/eta);
     vec4 Crefracted = sampleEnvmap(Rrn);
     float F = fresnel(eta, max(0.0,dot(Nn, Vn)));
-    if (transparent && dot(Rrn, Rrn) != 0.0)
+    if (transparent && Rrn != vec3(0.0))
         fragColor = mix(Crefracted, Creflected, F);
     else
         // non transparent or total internal reflection
         fragColor = Creflected * F;
+    //fragColor = vec4(Nn,1.0);
 }

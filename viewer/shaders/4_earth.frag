@@ -35,15 +35,20 @@ void main( void )
 
     // Bump mapping
     vec3 ns = texture(earthNormals, texCoords).xyz;
-    ns = 2 * ns - vec3(1, 1, 1);
+    ns = (2 * ns - vec3(1, 1, 1));
     // Compute normal / tangent / bi-tangent
     vec3 n = normalize(vertNormal);
-    vec3 t = normalize(normalMatrix * vec3(-sin(phi), cos(phi), 0));
-    vec3 b = normalize(cross(n, t));
+    // NH: here, you want to put theta (the horizontal angle) and you want it between 0 and 2*pi
+    theta = atan(vertPos.y, vertPos.x) + M_PI;
+    vec3 t = normalize(normalMatrix * normalize(vec3(sin(theta), -cos(theta), 0)));
+    vec3 b = - normalize(cross(n, t));
     // Local frame
     mat3 localFrame = mat3(t, b, n);
     // Modified normal
-    vec3 bumpNormal = normalize(transpose(localFrame) * ns);
+    // NH: That one took me quite some time to find.
+    // NH: localFrame bring ns into the "usual" coordinates.
+    // NH: You don't need to invert it.
+    vec3 bumpNormal = normalize(localFrame * ns);
 
     // illumination (phong)
     vec4 Ln = normalize(lightVector),
