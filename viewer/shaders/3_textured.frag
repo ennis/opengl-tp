@@ -5,12 +5,14 @@ uniform sampler2D colorTexture;
 uniform bool blinnPhong;
 uniform float shininess;
 uniform float eta;
+uniform sampler2D shadowMap;
 
 in vec4 eyeVector;
 in vec4 lightVector;
 in vec4 vertColor;
 in vec3 vertNormal;
 in vec2 textCoords;
+in vec3 lightSpace;
 
 out vec4 fragColor;
 
@@ -47,5 +49,15 @@ void main( void )
       specular = ks * color * pow(max(dot(R, Vn), 0.0), shininess) * lightIntensity;
     }
     specular *= fresnel(eta, dot(H, Vn));
-    fragColor = ambient + diffuse + specular;
+
+    vec2 bla;
+    bla.x = 0.5*(1+lightSpace.x);
+    bla.y = 0.5*(1+lightSpace.y);
+    float shadow = 2*texture(shadowMap, bla).z-1;
+    if (shadow < lightSpace.z - 0.01) {
+        fragColor = ambient;
+    } else {
+        fragColor = ambient + diffuse + specular; 
+    }
+    //fragColor = vec4(lightSpace,1.0) + 0.001 * shadow;
 }

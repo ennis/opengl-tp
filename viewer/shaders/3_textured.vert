@@ -5,6 +5,7 @@ uniform mat4 perspective;
 uniform mat3 normalMatrix;
 uniform bool noColor;
 uniform vec3 lightPosition;
+uniform mat4 worldToLightSpace;
 
 in vec3 vertex;
 in vec3 normal;
@@ -16,6 +17,7 @@ out vec4 lightVector;
 out vec4 vertColor;
 out vec3 vertNormal;
 out vec2 textCoords;
+out vec3 lightSpace;
 
 void main( void )
 {
@@ -28,6 +30,8 @@ void main( void )
     lightVector = normalize(vec4(lightPosition, 1.0) - vertPosition);
     // For texture mapping:
     textCoords = texcoords;
+    vec4 ls = (worldToLightSpace * vec4(vertex,1.0));
+    lightSpace = ls.xyz / ls.w;
 
     vertNormal = normalize(normalMatrix * normal);
     gl_Position = perspective * matrix * vec4(vertex, 1.0);

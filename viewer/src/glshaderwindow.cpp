@@ -883,6 +883,7 @@ void glShaderWindow::render()
 
     QMatrix4x4 lightCoordMatrix;
     QMatrix4x4 lightPerspective;
+    QMatrix4x4 worldToLightSpace;
     if ((ground_program->uniformLocation("shadowMap") != -1) || (m_program->uniformLocation("shadowMap") != -1) ){
         glActiveTexture(GL_TEXTURE2);
         glViewport(0, 0, shadowMapDimension, shadowMapDimension);
@@ -909,8 +910,11 @@ void glShaderWindow::render()
         // set up camera position in light source:
         // TODO_TP3: you must initialize these two matrices.
         lightCoordMatrix.setToIdentity();
-        // lightCoordMatrix = ...
-        lightPerspective.setToIdentity();
+        lightCoordMatrix.lookAt(lightPosition, center, QVector3D(0,1,0));
+        float radius = modelMesh->bsphere.r;
+        float dist = (lightPosition - center).length();
+        lightPerspective.perspective(45, 1, dist / 3, dist + 5*radius);
+        worldToLightSpace = lightPerspective * lightCoordMatrix;
         // lightPerspective = ...
         shadowMapGenerationProgram->setUniformValue("matrix", lightCoordMatrix);
         shadowMapGenerationProgram->setUniformValue("perspective", lightPerspective);
@@ -926,19 +930,21 @@ void glShaderWindow::render()
         shadowMapGenerationProgram->release();
         // add shadow map as texture:
         shadowMap->bindDefault();
-#define CRUDE_BUT_WORKS
+//#define CRUDE_BUT_WORKS
 #ifdef CRUDE_BUT_WORKS
         // That one works, but slow. In theory not required.
         QImage debugPix = shadowMap->toImage();
         QOpenGLTexture* sm = new QOpenGLTexture(QImage(debugPix));
         sm->bind(shadowMap->texture());
         sm->setWrapMode(QOpenGLTexture::ClampToEdge);
-        // debugPix.save("debug.png");
+       //debugPix.save("debug.png");
 #endif
         glClearColor( 0.2f, 0.2f, 0.2f, 1.0f );
         glEnable(GL_CULL_FACE);
         glCullFace (GL_BACK); // cull back face
     }
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, shadowMap->texture());
     m_program->bind();
     const qreal retinaScale = devicePixelRatio();
     glViewport(0, 0, width() * retinaScale, height() * retinaScale);
@@ -957,9 +963,9 @@ void glShaderWindow::render()
     m_program->setUniformValue("radius", modelMesh->bsphere.r);
     // Shadow Mapping
     if (m_program->uniformLocation("shadowMap") != -1) {
-        m_program->setUniformValue("shadowMap", shadowMap->texture());
+        m_program->setUniformValue("shadowMap", 2);
         // TODO_TP3: send the right transform here
-        // m_program->setUniformValue("worldToLightSpace", ... );
+        m_program->setUniformValue("worldToLightSpace", worldToLightSpace );
     }
 
     m_vao.bind();
@@ -984,9 +990,9 @@ void glShaderWindow::render()
         ground_program->setUniformValue("radius", modelMesh->bsphere.r);
         if (ground_program->uniformLocation("colorTexture") != -1) ground_program->setUniformValue("colorTexture", 0);
         if (ground_program->uniformLocation("shadowMap") != -1) {
-            ground_program->setUniformValue("shadowMap", shadowMap->texture());
+            ground_program->setUniformValue("shadowMap", 2);
             // TODO_TP3: send the right transform here
-            // ground_program->setUniformValue("worldToLightSpace", ... );
+            ground_program->setUniformValue("worldToLightSpace", worldToLightSpace );
         }
         ground_vao.bind();
         glDrawElements(GL_TRIANGLES, g_numIndices, GL_UNSIGNED_INT, 0);
