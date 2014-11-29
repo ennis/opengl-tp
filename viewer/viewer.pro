@@ -24,8 +24,6 @@ RESOURCES += shaders/core-profile.qrc
 OTHER_FILES +=  \
                 shaders/brick.vert \
                 shaders/brick.frag \
-                shaders/noiseMarble.vert \
-                shaders/noiseMarble.frag \
                 shaders/noiseJade.vert \
                 shaders/noiseJade.frag \
                 shaders/noiseWood.frag \
@@ -41,6 +39,10 @@ OTHER_FILES +=  \
     shaders/5_envMap.vert \
     shaders/noiseAlone.frag \
     shaders/noiseAlone.vert \
+    shaders/noiseMarble.vert \
+    shaders/noiseMarble.frag \
+    shaders/noiseWood.vert \
+    shaders/noiseWood.frag \
     shaders/h_shadowMapGeneration.frag \
     shaders/h_shadowMapGeneration.vert
 

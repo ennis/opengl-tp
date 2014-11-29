@@ -12,6 +12,10 @@
         <file>5_envMap.vert</file>
         <file>noiseAlone.frag</file>
         <file>noiseAlone.vert</file>
+        <file>noiseMarble.frag</file>
+        <file>noiseMarble.vert</file>
+        <file>noiseWood.frag</file>
+        <file>noiseWood.vert</file>
         <file>h_shadowMapGeneration.frag</file>
         <file>h_shadowMapGeneration.vert</file>
     </qresource>
