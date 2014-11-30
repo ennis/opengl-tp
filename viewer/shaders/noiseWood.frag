@@ -246,11 +246,11 @@ float fresnel(float eta, float cosTheta)
 void main( void )
 {
     // Texture sampling
-    vec3 woodDir = normalize(vec3(0.0, 1.0, 0.0));
-    float dist = length(cross(normalize(vertPos.xyz), woodDir));
-
-    float noise = perlinNoise(vertPos.xyz / radius).x;
-    vec4 color = texture(colorTexture, vec2(dist, 0));
+    vec3 woodDir = normalize(vec3(1.0, 5.0, 0.0));
+    float dist = length(cross(normalize(vertPos.xyz), woodDir)),
+      noise = 10.0 * dist / radius + 0.2 * perlinNoise(vertPos.xyz / radius).x;
+      // noise = 10.0 * dist / radius;
+    vec4 color = texture(colorTexture, vec2(noise, 0));
 
     // illumination (phong)
     vec4 Ln = normalize(lightVector),
@@ -283,6 +283,4 @@ void main( void )
     } else {
         fragColor = ambient + diffuse + specular; 
     }
-
-    fragColor = vec4(dist);
 }
