@@ -249,7 +249,7 @@ void main( void )
     vec3 woodDir = normalize(vec3(1.0, 5.0, 0.0));
     float dist = length(cross(normalize(vertPos.xyz), woodDir)),
       noise = 10.0 * dist / radius + 0.2 * perlinNoise(vertPos.xyz / radius).x;
-      // noise = 10.0 * dist / radius;
+      /* noise = 10.0 * dist / radius; */
     vec4 color = texture(colorTexture, vec2(noise, 0));
 
     // illumination (phong)
