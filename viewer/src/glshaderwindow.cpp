@@ -113,7 +113,7 @@ void glShaderWindow::openNewTexture() {
                 texture = new QOpenGLTexture(QImage(textureName));
                 if (texture) {
                     texture->setWrapMode(QOpenGLTexture::Repeat);
-                    texture->setMinificationFilter(QOpenGLTexture::Linear);
+                    texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
                     texture->setMagnificationFilter(QOpenGLTexture::Linear);
                     texture->bind(0);
                     if (m_program->uniformLocation("colorTexture") != -1) m_program->setUniformValue("colorTexture", 0);
@@ -611,7 +611,7 @@ void glShaderWindow::loadTexturesForShaders() {
         glActiveTexture(GL_TEXTURE0);
         texture = new QOpenGLTexture(QImage(workingDirectory + "../textures/earth1.png"));
         if (texture) {
-            texture->setMinificationFilter(QOpenGLTexture::Linear);
+            texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
             texture->setMagnificationFilter(QOpenGLTexture::Linear);
             texture->setWrapMode(QOpenGLTexture::MirroredRepeat);
             texture->bind(0);
@@ -621,7 +621,7 @@ void glShaderWindow::loadTexturesForShaders() {
         normalMap = new QOpenGLTexture(QImage(workingDirectory + "../textures/earth3.png"));
         if (normalMap) {
             normalMap->setWrapMode(QOpenGLTexture::MirroredRepeat);
-            normalMap->setMagnificationFilter(QOpenGLTexture::Linear);
+            normalMap->setMagnificationFilter(QOpenGLTexture::LinearMipMapLinear);
             normalMap->setMinificationFilter(QOpenGLTexture::Linear);
             normalMap->bind(1);
             m_program->setUniformValue("earthNormals", 1);
@@ -633,7 +633,7 @@ void glShaderWindow::loadTexturesForShaders() {
             texture = new QOpenGLTexture(QImage(textureName));
             if (texture) {
                 texture->setWrapMode(QOpenGLTexture::Repeat);
-                texture->setMinificationFilter(QOpenGLTexture::Linear);
+                texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
                 texture->setMagnificationFilter(QOpenGLTexture::Linear);
                 texture->bind(0);
                 if (m_program->uniformLocation("colorTexture") != -1) m_program->setUniformValue("colorTexture", 0);
@@ -646,7 +646,7 @@ void glShaderWindow::loadTexturesForShaders() {
             environmentMap = new QOpenGLTexture(QImage(envMapName).mirrored());
             if (environmentMap) {
                 environmentMap->setWrapMode(QOpenGLTexture::MirroredRepeat);
-                environmentMap->setMinificationFilter(QOpenGLTexture::Linear);
+                environmentMap->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
                 environmentMap->setMagnificationFilter(QOpenGLTexture::Nearest);
                 environmentMap->bind(1);
                 m_program->setUniformValue("envMap", 1);
@@ -937,7 +937,7 @@ void glShaderWindow::render()
         QOpenGLTexture* sm = new QOpenGLTexture(QImage(debugPix));
         sm->bind(shadowMap->texture());
         sm->setWrapMode(QOpenGLTexture::ClampToEdge);
-       debugPix.save("debug.png");
+       //debugPix.save("debug.png");
 #endif
         glClearColor( 0.2f, 0.2f, 0.2f, 1.0f );
         glEnable(GL_CULL_FACE);
