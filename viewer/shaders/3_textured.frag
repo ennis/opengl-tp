@@ -59,5 +59,4 @@ void main( void )
     } else {
         fragColor = ambient + diffuse + specular; 
     }
-    //fragColor = vec4(lightSpace,1.0) + 0.001 * shadow;
 }
