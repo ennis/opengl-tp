@@ -46,12 +46,11 @@ void main( void )
 
     vec2 bla;
     bla.x = 0.5*(1+lightSpace.x);
-    bla.y = 1 - 0.5*(1+lightSpace.y);
+    bla.y = 0.5*(1+lightSpace.y);
     float shadow = 2*texture(shadowMap, bla).z-1;
-    if (shadow < lightSpace.z) {
+    if (shadow < lightSpace.z - 0.01) {
         fragColor = ambient;
     } else {
         fragColor = ambient + diffuse + specular; 
     }
-    fragColor = vec4(vec3(shadow),1.0);
 }
